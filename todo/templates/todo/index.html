@@ -1,0 +1,83 @@
+{% extends 'base/base.html' %} {% block css %}
+<style>
+  body {
+    background-color: lightcoral;
+  }
+</style>
+{% endblock css %} {% block content %}
+<div class="container">
+  <div
+    class="row d-flex justify-content-center mt-5"
+  >
+    <div class="col">
+      <div>
+        <form action="{% url 'todo:index_view' %}" method="POST" class="input-group mb-4">
+          {% csrf_token %}
+          {{ form.title }}
+          <input
+            type="submit"
+            class="btn btn-primary fw-bold"
+            value="Əlavə et!"
+          />
+        </form>
+      </div>
+
+      <!-- Filter -->
+      <div class="btn-group mb-2">
+        <a href="{% url 'todo:index_view' %}" class="btn btn-outline-secondary {% if request.path == "/" %}active{% endif %}">Hamısı</a>
+        <a href="{% url 'todo:todo_completed_view' %}" class="btn btn-outline-secondary {% if request.path == "/todo/completed/" %}active{% endif %}">Tamamlananlar</a>
+        <a href="{% url 'todo:todo_uncompleted_view' %}" class="btn btn-outline-secondary {% if request.path == "/todo/uncompleted/" %}active{% endif %}">Tamamlanmayanlar</a>
+      </div>
+      <!-- END Filter -->
+
+      <!-- Result -->
+      <div>
+        <p class="mb-1 ms-1 fw-italic">{{ todos.count }} nəticə</p>
+      </div>
+      <!-- END Result -->
+
+
+      <table class="table text-center table-hover">
+        <thead class="table-dark">
+          <tr>
+            <th scope="col" style="width: 40px"></th>
+            <th scope="col" >Başlıq</th>
+            <th scope="col" style="width: 210px">Yenilənmə Vaxtı</th>
+            <th scope="col" style="width: 210px">Yaradılma Vaxtı</th>
+            <th scope="col" style="width: 35px"></th>
+            <th scope="col" style="width: 35px"></th>
+            <th scope="col" style="width: 35px"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for todo in todos %}
+          <tr class="bg-danger">
+            <td>
+              <input type="checkbox" {% if todo.is_completed %}checked{% endif %} onclick="toggleCompleted('{{ todo.slug }}')" />
+            </td>
+            <td {% if todo.is_completed %}style="text-decoration: line-through"{% endif %}>{{ todo.title }}</td>
+            <td {% if todo.is_completed %}style="text-decoration: line-through"{% endif %}>{{ todo.updated_at }}</td>
+            <td {% if todo.is_completed %}style="text-decoration: line-through"{% endif %}>{{ todo.created_at }}</td>
+            <td>
+              <a href="{% url 'todo:update_view' todo.slug %}">
+                <i class="fa-solid fa-pen-to-square text-text-info"></i>
+              </a>
+            </td>
+            <td>
+              <a href="{% url 'todo:delete_view' todo.slug %}">
+                <i class="fa-solid fa-trash-can text-danger"></i>
+              </a>
+            </td>
+            <td>
+              <a href="#">
+                <i class="fa-solid fa-eye text-secondary"></i>
+              </a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock content %}

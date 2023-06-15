@@ -1,0 +1,36 @@
+{% extends 'base/base.html' %} 
+
+
+{% block css %}
+<style>
+  body {
+    background-color: lightcoral;
+  }
+</style>
+{% endblock css %} 
+
+
+{% block content %}
+<div class="container">
+    <div class=" mt-5">
+        <div class="row d-flex justify-content-center mt-5">
+            <div class="col-10 col col-md-6">
+                <div class="card mt-5">
+                    <div class="card-body">
+                    <h5 class="card-title">{{ todo.title }}</h5>
+                    <h6 class="card-subtitle mb-2 text-body-secondary">@{{ todo.user }}</h6>
+                    <p class="card-text">
+                        {{ todo.description }}
+                    </p>
+                    <div>
+                        <p class="fst-italic m-0"><small>Yenilənmə vaxtı: {{ todo.updated_at }}</small></p>
+                        <p class="fst-italic">Yaradılma vaxtı: {{ todo.created_at }}</p>
+                    </div>
+                    <a href="{% url 'todo:update_view' todo.slug %}" class="card-link text-decoration-none">Düzəliş et</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

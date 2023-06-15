@@ -1,6 +1,9 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid">
-    <a class="navbar-brand fw-bold" href="/">TODO</a>
+    <a class="navbar-brand fw-bold ms-2" href="/">
+      <i class="fa-sharp fa-solid fa-list"></i>
+      TODO
+    </a>
     <button
       class="navbar-toggler"
       type="button"
@@ -15,13 +18,23 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto me-5">
         {% if not user.is_authenticated %}
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="{% url 'account:login_view' %}"
-            >Giriş</a
+        <li class="nav-item me-3">
+          <a
+            class="nav-link {% if request.path == "/login/" %}active{% endif %}"
+            href="{% url 'account:login_view' %}"
           >
+            <i class="fas fa-sign-in-alt"></i>
+            Giriş
+          </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'account:register_view' %}">Qeydiyyat</a>
+          <a 
+            class="nav-link {% if request.path == "/register/" %}active{% endif %}"
+            href="{% url 'account:register_view' %}"
+          >
+            <i class="fa-solid fa-user-plus"></i>
+            Qeydiyyat
+          </a>
         </li>
 
         {% else %}
@@ -29,10 +42,15 @@
           <a class="nav-link" href="#">@{{ user.username }}</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'account:logout_view' %}">Çıxış</a>
+          <a 
+            class="nav-link" 
+            href="{% url 'account:logout_view' %}"
+          >
+          Çıxış
+          <i class="fa-solid fa-right-from-bracket"></i>
+          </a>
         </li>
         {% endif %}
-
       </ul>
     </div>
   </div>

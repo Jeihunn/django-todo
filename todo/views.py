@@ -156,45 +156,6 @@ def delete_all_view(request):
 
 
 @login_required(login_url="account:login_view")
-def trash_view(request):
-    deleted_todos = Todo.objects.filter(
-        is_active=True, is_deleted=True, user=request.user)
-    context = {
-        "deleted_todos": deleted_todos,
-    }
-    return render(request, 'todo/trash.html', context)
-
-
-@login_required(login_url="account:login_view")
-def restore_todo_view(request, todo_slug):
-    todo = get_object_or_404(Todo, slug=todo_slug)
-    todo.is_deleted = False
-    todo.save()
-    messages.success(
-        request, f"Tapşırıq '{todo.title}' uğurla bərpa edildi.")
-    return redirect('todo:trash_view')
-
-
-@login_required(login_url="account:login_view")
-def permanently_delete_todo_view(request, todo_slug):
-    todo = get_object_or_404(Todo, slug=todo_slug)
-    messages.success(
-        request, f"Tapşırıq '{todo.title}' həmişəlik silindi.")
-    todo.delete()
-    return redirect('todo:trash_view')
-
-
-@login_required(login_url="account:login_view")
-def empty_trash_view(request):
-    deleted_todos = Todo.objects.filter(
-        is_active=True, is_deleted=True, user=request.user)
-    deleted_todos.delete()
-    messages.success(
-        request, "Zibil qutusu boşaldıldı!")
-    return redirect('todo:trash_view')
-
-
-@login_required(login_url="account:login_view")
 def toggle_completed(request, todo_slug):
     todo = get_object_or_404(Todo, slug=todo_slug)
 
@@ -231,3 +192,43 @@ def remove_favorite_view(request, todo_slug):
 
     request.user.favorited_by.remove_todo_from_favorites(todo)
     return redirect(request.META.get('HTTP_REFERER', 'todo:index_view'))
+
+
+# =============== Trash ===============
+@login_required(login_url="account:login_view")
+def trash_view(request):
+    deleted_todos = Todo.objects.filter(
+        is_active=True, is_deleted=True, user=request.user).order_by("-updated_at")
+    context = {
+        "deleted_todos": deleted_todos,
+    }
+    return render(request, 'todo/trash.html', context)
+
+
+@login_required(login_url="account:login_view")
+def restore_todo_view(request, todo_slug):
+    todo = get_object_or_404(Todo, slug=todo_slug)
+    todo.is_deleted = False
+    todo.save()
+    messages.success(
+        request, f"Tapşırıq '{todo.title}' uğurla bərpa edildi.")
+    return redirect('todo:trash_view')
+
+
+@login_required(login_url="account:login_view")
+def permanently_delete_todo_view(request, todo_slug):
+    todo = get_object_or_404(Todo, slug=todo_slug)
+    messages.success(
+        request, f"Tapşırıq '{todo.title}' həmişəlik silindi.")
+    todo.delete()
+    return redirect('todo:trash_view')
+
+
+@login_required(login_url="account:login_view")
+def empty_trash_view(request):
+    deleted_todos = Todo.objects.filter(
+        is_active=True, is_deleted=True, user=request.user)
+    deleted_todos.delete()
+    messages.success(
+        request, "Zibil qutusu boşaldıldı!")
+    return redirect('todo:trash_view')

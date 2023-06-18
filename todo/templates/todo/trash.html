@@ -26,16 +26,21 @@
                     <tbody >
                     {% for todo in deleted_todos %}
                     <tr class="text-truncate text-wrap">
-                        <td class="text-truncate text-wrap">{{ todo.title }}</td>
-                        <td style="width: 45px">
+                        <td class="text-truncate text-wrap">
+                            <span class="ms-1">{{ todo.title }}</span>
+                        </td>
+                        <td class="text-center" style="width: 45px">
                             <a href="{% url 'todo:restore_todo_view' todo.slug %}">
                                 <i class="fa-solid fa-rotate-left text-success"></i>
                             </a>
                         </td>
-                        <td style="width: 45px">
+                        <td class="text-center" style="width: 45px">
                             <a href="{% url 'todo:permanently_delete_todo_view' todo.slug %}">
                                 <i class="fa-solid fa-trash text-danger"></i>
                             </a>
+                        </td>
+                        <td class="text-end" style="width: 150px">
+                            <span class="me-2">{{ todo.updated_at|date:"d/m/Y H:i" }}</span>
                         </td>
                     </tr>
                     

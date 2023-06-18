@@ -92,7 +92,7 @@
                   <td {% if todo.is_completed %}style="text-decoration: line-through"{% endif %}>{{ todo.created_at }}</td>
                   <td>
                     <a href="{% url 'todo:update_view' todo.slug %}">
-                      <i class="fa-solid fa-pen-to-square text-text-info"></i>
+                      <i class="fa-solid fa-pen-to-square"></i>
                     </a>
                   </td>
                   <td>

@@ -16,7 +16,8 @@ class Todo(models.Model):
         verbose_name="Yaradılma Vaxtı", auto_now_add=True)
     updated_at = models.DateTimeField(
         verbose_name="Yenilənmə Vaxtı", auto_now=True)
-    slug = AutoSlugField(populate_from='title')
+    is_deleted = models.BooleanField(verbose_name="Silindi", default=False)
+    slug = AutoSlugField(populate_from='title', unique=True)
 
     def __str__(self):
         return self.title

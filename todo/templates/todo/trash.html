@@ -1,0 +1,55 @@
+{% extends 'base/base.html' %}
+
+{% block css %}
+<style>
+  body {
+    background-color: lightcoral;
+  }
+</style>
+{% endblock css %}
+
+{% block page_title %}
+<title>TODO - Zibil Qutusu</title>
+{% endblock page_title %}
+
+{% block content %}
+<div class="container">
+    <div class="row mt-5">
+        <div class="col">
+            <h2>Silinən Tapşırıqlar</h2>
+            {% if deleted_todos %}
+            <a href="{% url 'todo:empty_trash_view' %}" class="btn btn-danger">Zibil qutusunu boşalt!</a>
+            {% endif %}
+            <!-- Table -->
+            <div class="table-responsive mt-3">
+                <table class="table table-sm table-hover">
+                    <tbody >
+                    {% for todo in deleted_todos %}
+                    <tr class="text-truncate text-wrap">
+                        <td class="text-truncate text-wrap">{{ todo.title }}</td>
+                        <td style="width: 45px">
+                            <a href="{% url 'todo:restore_todo_view' todo.slug %}">
+                                <i class="fa-solid fa-rotate-left text-success"></i>
+                            </a>
+                        </td>
+                        <td style="width: 45px">
+                            <a href="{% url 'todo:permanently_delete_todo_view' todo.slug %}">
+                                <i class="fa-solid fa-trash text-danger"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    
+                    {% empty %}
+                    <tr>
+                        <td colspan="8">Zibil qutusu boşdur.</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <!-- END Table -->
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

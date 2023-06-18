@@ -9,24 +9,41 @@
 </style>
 {% endblock css %} 
 
+{% block page_title %}
+<title>TODO - Təfərrüat</title>
+{% endblock page_title %}
 
 {% block content %}
 <div class="container">
-    <div class=" mt-5">
+    <div class="mt-5">
         <div class="row d-flex justify-content-center mt-5">
-            <div class="col-10 col col-md-6">
+            <div class="col-10 col-md-6">
                 <div class="card mt-5">
-                    <div class="card-body">
-                    <h5 class="card-title">{{ todo.title }}</h5>
-                    <h6 class="card-subtitle mb-2 text-body-secondary">@{{ todo.user }}</h6>
-                    <p class="card-text">
-                        {{ todo.description }}
-                    </p>
-                    <div>
-                        <p class="fst-italic m-0"><small>Yenilənmə vaxtı: {{ todo.updated_at }}</small></p>
-                        <p class="fst-italic">Yaradılma vaxtı: {{ todo.created_at }}</p>
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="card-title text-truncate text-wrap">{{ todo.title }}</h5>
+                        {% if is_favorite %}
+                          <a href="{% url 'todo:remove_favorite_view' todo.slug %}">
+                            <i class="fa-solid fa-star text-warning"></i>
+                          </a>
+                        {% else %}
+                          <a href="{% url 'todo:add_favorite_view' todo.slug %}">
+                            <i class="fa-regular fa-star text-dark"></i>
+                          </a>
+                        {% endif %}
                     </div>
-                    <a href="{% url 'todo:update_view' todo.slug %}" class="card-link text-decoration-none">Düzəliş et</a>
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2 text-body-secondary">@{{ todo.user }}</h6>
+                        <p class="card-text">
+                            <small class="fst-italic"><span>Açıqlama:</span></small>
+                            <p>{{ todo.description }}</p>
+                        </p>
+                        <div>
+                            <p class="fst-italic m-0"><small>Yenilənmə vaxtı: {{ todo.updated_at }}</small></p>
+                            <p class="fst-italic"><small>Yaradılma vaxtı: {{ todo.created_at }}</small></p>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="{% url 'todo:update_view' todo.slug %}" class="card-link text-decoration-none">Düzəliş et</a>
                     </div>
                 </div>
             </div>

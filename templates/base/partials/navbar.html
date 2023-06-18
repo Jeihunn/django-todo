@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid">
     <a class="navbar-brand fw-bold ms-2" href="/">
-      <i class="fa-sharp fa-solid fa-list"></i>
+      <i class="fa-solid fa-rectangle-list"></i>
       TODO
     </a>
     <button
@@ -39,7 +39,14 @@
 
         {% else %}
         <li class="nav-item">
-          <a class="nav-link" href="#">@{{ user.username }}</a>
+          <a class="nav-link" href="#">
+            <i class="fa-solid fa-user"></i> {{ user.username }}
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'todo:trash_view' %}">
+            <i class="fa-solid fa-trash-can"></i> Zibil Qutusu ({{ trash_todo_count_global }})
+          </a>
         </li>
         <li class="nav-item">
           <a 

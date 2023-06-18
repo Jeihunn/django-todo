@@ -19,7 +19,7 @@ def register_view(request):
             # user = authenticate(request, username=username, password=password)
             # login(request, user)
             messages.success(
-                request, "Uğurla qeydiyyatdan keçildi. İndi giriş edə bilərsən.")
+                request, "Uğurla qeydiyyatdan keçdin. İndi giriş edə bilərsən.")
             return redirect('account:login_view')
     else:
         form = RegisterForm()

@@ -75,6 +75,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                # My Context Processors
+                "config.context_processors.trash_todo_count_global"
             ],
         },
     },

@@ -1,0 +1,57 @@
+{% extends 'base/base.html' %}
+
+
+{% block css %}
+<style>
+  body {
+    background-color: lightcoral;
+  }
+</style>
+{% endblock css %} 
+
+
+{% block page_title %}
+<title>TODO - Siyahılar</title>
+{% endblock page_title %}
+
+
+{% block content %}
+<div class="container">
+  <div class="row mt-5">
+    <div class="col">
+
+      <form action="{% url 'todo:list_view' %}" method="POST" class="input-group my-5 w-75">
+        {% csrf_token %}
+        {{ form.title }}
+        <input
+          type="submit"
+          class="btn btn-primary fw-bold"
+          value="Yarat!"
+        />
+      </form>
+
+      <h3>Siyahılar</h3>
+      <hr>
+
+      <!-- Siyahılar -->
+      <ul class="list-group mb-5">
+        {% for list_item in todo_lists %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <a class="text-decoration-none text-dark" href="{% url 'todo:todo_view' list_item.slug %}">
+            {{ list_item.title }}
+          </a>
+          <div>
+            <span class="badge bg-primary rounded-pill">{{ list_item.todos_count }}</span>
+            <a href="{% url 'todo:list_delete_view' list_item.slug %}">
+              <i class="ms-4 fa-solid fa-trash-can text-danger"></i>
+            </a>
+          </div>
+        </li>
+      {% endfor %}
+      </ul>
+      <!-- END Siyahılar -->
+
+    </div>
+  </div>
+</div>
+{% endblock content %}

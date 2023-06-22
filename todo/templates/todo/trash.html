@@ -1,5 +1,6 @@
 {% extends 'base/base.html' %}
 
+
 {% block css %}
 <style>
   body {
@@ -8,15 +9,17 @@
 </style>
 {% endblock css %}
 
+
 {% block page_title %}
 <title>TODO - Zibil Qutusu</title>
 {% endblock page_title %}
+
 
 {% block content %}
 <div class="container">
     <div class="row mt-5">
         <div class="col">
-            <h2>Silinən Tapşırıqlar</h2>
+            <h3>Silinən Tapşırıqlar</h3>
             {% if deleted_todos %}
             <a href="{% url 'todo:empty_trash_view' %}" class="btn btn-danger">Zibil qutusunu boşalt!</a>
             {% endif %}
@@ -25,7 +28,7 @@
                 <table class="table table-sm table-hover">
                     <tbody >
                     {% for todo in deleted_todos %}
-                    <tr class="text-truncate text-wrap">
+                    <tr class="">
                         <td class="text-truncate text-wrap">
                             <span class="ms-1">{{ todo.title }}</span>
                         </td>
@@ -39,6 +42,11 @@
                                 <i class="fa-solid fa-trash text-danger"></i>
                             </a>
                         </td>
+
+                        <td class="text-center" style="width: 130px">
+                            (<span class="me-2 text-info">{{ todo.list|truncatechars:10 }}</span>)
+                        </td>
+                        
                         <td class="text-end" style="width: 150px">
                             <span class="me-2">{{ todo.updated_at|date:"d/m/Y H:i" }}</span>
                         </td>
@@ -56,5 +64,4 @@
         </div>
     </div>
 </div>
-
 {% endblock content %}

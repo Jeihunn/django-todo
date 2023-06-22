@@ -1,5 +1,21 @@
 from django import forms
-from .models import Todo
+from .models import List, Todo
+
+
+class ListForm(forms.ModelForm):
+    title = forms.CharField(
+        max_length=80,
+        widget=forms.TextInput(
+            attrs={"class": "form-control", "placeholder": "Yeni siyahı"}),
+        required=True,
+    )
+
+    class Meta:
+        model = List
+        fields = ["title"]
+        labels = {
+            "title": "Siyahı Başlığı"
+        }
 
 
 class TodoForm(forms.ModelForm):

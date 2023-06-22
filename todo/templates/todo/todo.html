@@ -1,0 +1,133 @@
+{% extends 'base/base.html' %} 
+
+{% block css %}
+<style>
+  body {
+    background-color: lightcoral;
+  }
+</style>
+{% endblock css %} 
+
+{% block page_title %}
+<title>TODO - Tapşırıqlar</title>
+{% endblock page_title %}
+
+{% block content %}
+<div class="container">
+  <div class="row mt-5">
+    <div class="col">
+
+      <form action="{% url 'todo:todo_view' todo_list.slug %}" method="POST" class="input-group my-5 w-75">
+        {% csrf_token %}
+        {{ form.title }}
+        <input
+          type="submit"
+          class="btn btn-primary fw-bold"
+          value="Əlavə et!"
+        />
+      </form>
+
+      <h5>
+        <span>Siyahı: </span>
+        <span class="text-secondary fst-italic">{{ todo_list.title }}</span>
+      </h5>
+      <h3>Tapşırıqlar</h3>
+      <hr>
+
+      <!-- Filter -->
+      <div class="btn-group d-flex flex-wrap mb-2">
+        <a href="{% url 'todo:todo_view' todo_list.slug %}" class="btn btn-outline-secondary {% if request.resolver_match.view_name == "todo:todo_view" %}active{% endif %}">
+          <i class="fas fa-list"></i> Hamısı
+        </a>
+        <a href="{% url 'todo:todo_completed_view' todo_list.slug %}" class="btn btn-outline-secondary {% if request.resolver_match.view_name == "todo:todo_completed_view" %}active{% endif %}">
+          <i class="fas fa-check-circle"></i> Tamamlananlar
+        </a>
+        <a href="{% url 'todo:todo_uncompleted_view' todo_list.slug %}" class="btn btn-outline-secondary {% if request.resolver_match.view_name == "todo:todo_uncompleted_view" %}active{% endif %}">
+          <i class="fas fa-times-circle"></i> Tamamlanmayanlar
+        </a>
+        <a href="{% url 'todo:todo_favorited_view' todo_list.slug %}" class="btn btn-outline-secondary {% if request.resolver_match.view_name == "todo:todo_favorited_view" %}active{% endif %}">
+          <i class="fas fa-star"></i> Favorilər
+        </a>
+      </div>
+      <!-- END Filter -->
+
+      <!-- Result -->
+      <div>
+        <p class="mb-1 ms-1 fw-italic">{{ todos.count }} nəticə</p>
+      </div>
+      <!-- END Result -->
+
+      <!-- Table -->
+      <div class="table-responsive">
+        <table class="table table-sm text-center table-hover">
+          <thead class="table-dark">
+            <tr>
+              <th scope="col" style="width: 40px"></th>
+              <th scope="col" >Başlıq</th>
+              <th scope="col" style="width: 35px"></th>
+              <th scope="col" style="width: 210px">Yenilənmə Vaxtı</th>
+              <th scope="col" style="width: 210px">Yaradılma Vaxtı</th>
+              <th scope="col" style="width: 35px"></th>
+              <th scope="col" style="width: 35px"></th>
+              <th scope="col" style="width: 35px"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for todo in todos %}
+            <tr class="bg-danger">
+
+              <td>
+                <input type="checkbox" {% if todo.is_completed %}checked{% endif %} onclick="toggleCompleted('{{ todo.list.slug }}', '{{ todo.slug }}')" />
+              </td>
+              <td class="" {% if todo.is_completed %}style="text-decoration: line-through"{% endif %}>{{ todo.title }}</td>
+              
+              <td>
+                {% if todo in favorites %}
+                  <a href="{% url 'todo:remove_favorite_view' todo_list.slug todo.slug %}">
+                    <i class="fa-solid fa-star text-warning"></i>
+                  </a>
+                {% else %}
+                  <a href="{% url 'todo:add_favorite_view' todo_list.slug todo.slug %}">
+                    <i class="fa-regular fa-star text-dark"></i>
+                  </a>
+                {% endif %}
+              </td>
+              <td {% if todo.is_completed %}style="text-decoration: line-through"{% endif %}>{{ todo.updated_at }}</td>
+              <td {% if todo.is_completed %}style="text-decoration: line-through"{% endif %}>{{ todo.created_at }}</td>
+              <td>
+                <a href="{% url 'todo:todo_update_view' todo_list.slug todo.slug %}">
+                  <i class="fa-solid fa-pen-to-square"></i>
+                </a>
+              </td>
+              <td>
+                <a href="{% url 'todo:todo_delete_view' todo_list.slug todo.slug %}">
+                  <i class="fa-solid fa-trash-can text-danger"></i>
+                </a>
+              </td>
+              <td>
+                <a href="{% url 'todo:todo_detail_view' todo_list.slug todo.slug %}">
+                  <i class="fa-solid fa-eye text-secondary"></i>
+                </a>
+              </td>
+            </tr>
+            
+            {% empty %}
+            <tr>
+              <td colspan="8">Hələ ki, heç bir tapşırıq əlavə etməmisiniz.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <!-- END Table -->
+
+      {% if request.resolver_match.view_name == "todo:todo_view" and todos %}
+      <div class="mb-5">
+        <a href="{% url 'todo:todo_delete_all_view' todo_list.slug %}" class="btn btn-danger">Hamısını sil</a>
+      </div>
+      {% endif %}
+
+    </div>
+  </div>
+</div>
+{% endblock content %}

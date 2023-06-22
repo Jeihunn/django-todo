@@ -22,28 +22,29 @@
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="card-title text-truncate text-wrap">{{ todo.title }}</h5>
                         {% if is_favorite %}
-                          <a href="{% url 'todo:remove_favorite_view' todo.slug %}">
-                            <i class="fa-solid fa-star text-warning"></i>
-                          </a>
+                        <a href="{% url 'todo:remove_favorite_view' todo_list.slug todo.slug %}">
+                          <i class="fa-solid fa-star text-warning"></i>
+                        </a>
                         {% else %}
-                          <a href="{% url 'todo:add_favorite_view' todo.slug %}">
-                            <i class="fa-regular fa-star text-dark"></i>
-                          </a>
+                        <a href="{% url 'todo:add_favorite_view' todo_list.slug todo.slug %}">
+                          <i class="fa-regular fa-star text-dark"></i>
+                        </a>
                         {% endif %}
                     </div>
                     <div class="card-body">
-                        <h6 class="card-subtitle mb-2 text-body-secondary">@{{ todo.user }}</h6>
+                        <h6 class="card-subtitle mb-2 text-body-secondary">Siyahı: {{ todo.list }}</h6>
+                        <h6 class="card-subtitle mb-2 text-body-secondary">İstifadəçi: @{{ todo.user }}</h6>
                         <p class="card-text">
                             <small class="fst-italic"><span>Açıqlama:</span></small>
                             <p>{{ todo.description }}</p>
                         </p>
                         <div>
-                            <p class="fst-italic m-0"><small>Yenilənmə vaxtı: {{ todo.updated_at }}</small></p>
-                            <p class="fst-italic"><small>Yaradılma vaxtı: {{ todo.created_at }}</small></p>
+                            <p class="fst-italic m-0"><small>Yenilənmə vaxtı: {{ todo.updated_at|date:"d/m/Y H:i" }}</small></p>
+                            <p class="fst-italic"><small>Yaradılma vaxtı: {{ todo.created_at|date:"d/m/Y H:i" }}</small></p>
                         </div>
                     </div>
                     <div class="card-footer">
-                        <a href="{% url 'todo:update_view' todo.slug %}" class="card-link text-decoration-none">Düzəliş et</a>
+                        <a href="{% url 'todo:todo_update_view' todo_list.slug todo.slug %}" class="card-link text-decoration-none">Düzəliş et</a>
                     </div>
                 </div>
             </div>

@@ -3,7 +3,28 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
+class List(models.Model):
+    user = models.ForeignKey(User, verbose_name=(
+        "İstifadəçi Adı"), on_delete=models.CASCADE, null=True, blank=True)
+    title = models.CharField(verbose_name="Başlıq", max_length=255)
+    is_active = models.BooleanField(verbose_name="Aktiv", default=True)
+    created_at = models.DateTimeField(
+        verbose_name="Yaradılma Vaxtı", auto_now_add=True)
+    updated_at = models.DateTimeField(
+        verbose_name="Yenilənmə Vaxtı", auto_now=True)
+    slug = AutoSlugField(populate_from='title', unique=True)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = ("Siayhı")
+        verbose_name_plural = ("Siyahılar")
+
+
 class Todo(models.Model):
+    list = models.ForeignKey(List, related_name='list_todos', verbose_name=(
+        "Siyahı"), on_delete=models.CASCADE)
     user = models.ForeignKey(User, verbose_name=(
         "İstifadəçi Adı"), on_delete=models.CASCADE, null=True, blank=True)
     title = models.CharField(verbose_name="Başlıq", max_length=255)

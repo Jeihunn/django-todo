@@ -8,7 +8,7 @@ from .forms import RegisterForm, LoginForm
 
 def register_view(request):
     if request.user.is_authenticated:
-        return redirect('todo:index_view')
+        return redirect('todo:list_view')
 
     if request.method == 'POST':
         form = RegisterForm(request.POST)
@@ -33,7 +33,7 @@ def register_view(request):
 
 def login_view(request):
     if request.user.is_authenticated:
-        return redirect('todo:index_view')
+        return redirect('todo:list_view')
 
     if request.method == 'POST':
         form = LoginForm(request, data=request.POST)
@@ -42,7 +42,7 @@ def login_view(request):
             login(request, user)
             messages.success(
                 request, "Giriş uğurlu oldu!")
-            return redirect('todo:index_view')
+            return redirect('todo:list_view')
     else:
         form = LoginForm()
 

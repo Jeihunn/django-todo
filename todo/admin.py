@@ -1,11 +1,19 @@
 from django.contrib import admin
-from .models import Todo, Favorite
+from .models import List, Todo, Favorite
+
+
+@admin.register(List)
+class ListAdmin(admin.ModelAdmin):
+    list_display = ["id", "title", "updated_at", "created_at",
+                    "user", "is_active", "slug"]
+    list_editable = ["is_active"]
+    list_display_links = ["id", "title"]
 
 
 @admin.register(Todo)
 class TodoAdmin(admin.ModelAdmin):
     list_display = ["id", "title", "updated_at", "created_at",
-                    "user", "is_active", "is_completed", "is_deleted", "slug"]
+                    "is_active", "is_completed", "is_deleted", "slug", "list", "user"]
     list_editable = ["is_active", "is_completed", "is_deleted"]
     list_display_links = ["id", "title"]
 

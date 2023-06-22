@@ -1,12 +1,12 @@
-function toggleCompleted(todo_slug) {
-  fetch(`/toggle-completed/${todo_slug}/`)
+function toggleCompleted(list_slug, todo_slug) {
+  fetch(`/toggle-completed/${list_slug}/${todo_slug}/`)
     .then((response) => response.json())
     .then((data) => {
       if (data.success) {
-        // Əməliyyat uğurlu olarsa, səhifəni yeniləyin
+        // Əməliyyat uğurlu olduqda bir şey etməyə gərək yoxdur, çünki səhifə yenilənəcək.
         location.reload();
       } else {
-        // Əməliyyat uğursuz olarsa, xəta mesajını göstərin
+        // Əməliyyat uğursuz olduqda, xəta mesajını göstərin
         alert(data.message);
       }
     })
@@ -15,3 +15,5 @@ function toggleCompleted(todo_slug) {
       alert("Xəta baş verdi. Zəhmət olmasa bir daha cəhd edin.");
     });
 }
+
+

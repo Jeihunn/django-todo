@@ -17,10 +17,11 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto me-5">
+
         {% if not user.is_authenticated %}
         <li class="nav-item me-3">
           <a
-            class="nav-link {% if request.path == "/login/" %}active{% endif %}"
+            class="nav-link {% if request.resolver_match.view_name == "account:login_view" %}active{% endif %}"
             href="{% url 'account:login_view' %}"
           >
             <i class="fas fa-sign-in-alt"></i>
@@ -29,7 +30,7 @@
         </li>
         <li class="nav-item">
           <a 
-            class="nav-link {% if request.path == "/register/" %}active{% endif %}"
+            class="nav-link {% if request.resolver_match.view_name == "account:register_view" %}active{% endif %}"
             href="{% url 'account:register_view' %}"
           >
             <i class="fa-solid fa-user-plus"></i>
@@ -43,11 +44,13 @@
             <i class="fa-solid fa-user"></i> {{ user.username }}
           </a>
         </li>
+
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'todo:trash_view' %}">
+          <a class="nav-link {% if request.resolver_match.view_name == "todo:trash_view" %}active{% endif %}" href="{% url 'todo:trash_view' %}">
             <i class="fa-solid fa-trash-can"></i> Zibil Qutusu ({{ trash_todo_count_global }})
           </a>
         </li>
+        
         <li class="nav-item">
           <a 
             class="nav-link" 

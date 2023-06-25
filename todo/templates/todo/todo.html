@@ -3,7 +3,7 @@
 {% block css %}
 <style>
   body {
-    background-color: lightcoral;
+    background-color: lightsalmon;
   }
 </style>
 {% endblock css %} 
@@ -74,7 +74,7 @@
           </thead>
           <tbody>
             {% for todo in todos %}
-            <tr class="bg-danger">
+            <tr {% if todo.is_completed %}class="table-success"{% endif %}>
 
               <td>
                 <input type="checkbox" {% if todo.is_completed %}checked{% endif %} onclick="toggleCompleted('{{ todo.list.slug }}', '{{ todo.slug }}')" />
@@ -92,8 +92,8 @@
                   </a>
                 {% endif %}
               </td>
-              <td {% if todo.is_completed %}style="text-decoration: line-through"{% endif %}>{{ todo.updated_at }}</td>
-              <td {% if todo.is_completed %}style="text-decoration: line-through"{% endif %}>{{ todo.created_at }}</td>
+              <td {% if todo.is_completed %}style="text-decoration: line-through"{% endif %}>{{ todo.updated_at|date:"d/m/Y H:i" }}</td>
+              <td {% if todo.is_completed %}style="text-decoration: line-through"{% endif %}>{{ todo.created_at|date:"d/m/Y H:i" }}</td>
               <td>
                 <a href="{% url 'todo:todo_update_view' todo_list.slug todo.slug %}">
                   <i class="fa-solid fa-pen-to-square"></i>

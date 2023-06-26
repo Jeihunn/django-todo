@@ -1,4 +1,4 @@
-from django.http import JsonResponse, Http404
+from django.http import HttpResponseForbidden, JsonResponse, Http404
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -22,6 +22,7 @@ def list_view(request):
             todo_list = List.objects.create(title=title, user=request.user)
             return redirect("todo:list_view")
 
+
     for list_item in todo_lists:
         list_item.todos_count = list_item.list_todos.filter(
             is_active=True, is_deleted=False).count()
@@ -36,6 +37,10 @@ def list_view(request):
 @login_required(login_url="account:login_view")
 def list_delete_view(request, list_slug):
     todo_list = get_object_or_404(List, slug=list_slug)
+
+    if todo_list.user != request.user:
+        return HttpResponseForbidden("Bu listə icazəniz yoxdur.")
+
     todo_list.delete()
     messages.success(request, f"Siyahı '{todo_list.title}' silindi!")
     return redirect(request.META.get('HTTP_REFERER', 'todo:list_view'))
@@ -48,6 +53,10 @@ def list_delete_view(request, list_slug):
 @login_required(login_url="account:login_view")
 def todo_view(request, list_slug):
     todo_list = get_object_or_404(List, slug=list_slug)
+
+    if todo_list.user != request.user:
+        return HttpResponseForbidden("Bu listə icazəniz yoxdur.")
+
     todos = Todo.objects.filter(
         is_active=True, is_deleted=False, user=request.user, list=todo_list).order_by("-updated_at")
     favorites = todos.filter(favorites__user=request.user)
@@ -77,6 +86,9 @@ def toggle_completed_view(request, list_slug, todo_slug):
     if todo.is_deleted:
         raise Http404("Bu tapşırıq silinib.")
 
+    if todo.user != request.user:
+        return HttpResponseForbidden("Bu tapşırığa icazəniz yoxdur.")
+
     todo.is_completed = not todo.is_completed
     todo.save()
     return JsonResponse({'success': True})
@@ -85,6 +97,10 @@ def toggle_completed_view(request, list_slug, todo_slug):
 @login_required(login_url="account:login_view")
 def todo_completed_view(request, list_slug):
     todo_list = get_object_or_404(List, slug=list_slug)
+
+    if todo_list.user != request.user:
+        return HttpResponseForbidden("Bu listə icazəniz yoxdur.")
+
     todos = Todo.objects.filter(
         is_active=True, is_deleted=False, user=request.user, list__slug=list_slug, is_completed=True).order_by("-updated_at")
     favorites = todos.filter(favorites__user=request.user)
@@ -110,6 +126,10 @@ def todo_completed_view(request, list_slug):
 @login_required(login_url="account:login_view")
 def todo_uncompleted_view(request, list_slug):
     todo_list = get_object_or_404(List, slug=list_slug)
+
+    if todo_list.user != request.user:
+        return HttpResponseForbidden("Bu listə icazəniz yoxdur.")
+
     todos = Todo.objects.filter(
         is_active=True, is_deleted=False, user=request.user, list__slug=list_slug, is_completed=False).order_by("-updated_at")
     favorites = todos.filter(favorites__user=request.user)
@@ -135,6 +155,10 @@ def todo_uncompleted_view(request, list_slug):
 @login_required(login_url="account:login_view")
 def todo_favorited_view(request, list_slug):
     todo_list = get_object_or_404(List, slug=list_slug)
+
+    if todo_list.user != request.user:
+        return HttpResponseForbidden("Bu listə icazəniz yoxdur.")
+
     todos = Todo.objects.filter(
         favorites__user=request.user, is_active=True, list__slug=list_slug, is_deleted=False,).order_by("-updated_at")
     favorites = todos.filter(favorites__user=request.user)
@@ -164,6 +188,9 @@ def add_favorite_view(request, list_slug, todo_slug):
     if todo.is_deleted:
         raise Http404("Bu tapşırıq silinib.")
 
+    if todo.user != request.user:
+        return HttpResponseForbidden("Bu tapşırığa icazəniz yoxdur.")
+
     try:
         favorite = request.user.favorited_by
     except Favorite.DoesNotExist:
@@ -180,6 +207,9 @@ def remove_favorite_view(request, list_slug, todo_slug):
     if todo.is_deleted:
         raise Http404("Bu tapşırıq silinib.")
 
+    if todo.user != request.user:
+        return HttpResponseForbidden("Bu tapşırığa icazəniz yoxdur.")
+
     request.user.favorited_by.remove_todo_from_favorites(todo)
     return redirect(request.META.get('HTTP_REFERER', 'todo:todo_view'))
 
@@ -191,6 +221,9 @@ def todo_update_view(request, list_slug, todo_slug):
 
     if todo.is_deleted:
         raise Http404("Bu tapşırıq silinib.")
+
+    if todo.user != request.user:
+        return HttpResponseForbidden("Bu tapşırığa icazəniz yoxdur.")
 
     form = TodoDetailForm(instance=todo)
 
@@ -217,6 +250,9 @@ def todo_detail_view(request, list_slug, todo_slug):
     if todo.is_deleted:
         raise Http404("Bu tapşırıq silinib.")
 
+    if todo.user != request.user:
+        return HttpResponseForbidden("Bu tapşırığa icazəniz yoxdur.")
+
     is_favorite = Favorite.objects.filter(
         user=request.user, todos__id=todo.id).exists()
 
@@ -231,6 +267,10 @@ def todo_detail_view(request, list_slug, todo_slug):
 @login_required(login_url="account:login_view")
 def todo_delete_view(request, list_slug, todo_slug):
     todo = get_object_or_404(Todo, list__slug=list_slug, slug=todo_slug)
+
+    if todo.user != request.user:
+        return HttpResponseForbidden("Bu tapşırığa icazəniz yoxdur.")
+
     todo.is_deleted = True
     todo.save()
     messages.success(

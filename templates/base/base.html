@@ -18,22 +18,9 @@
     {% block css %}{% endblock css %}
   </head>
   <body>
+
     <!-- Alert -->
-    {% if messages %} {% for message in messages %}
-    <div
-      class="alert alert-{{ message.tags }} alert-dismissible fade show text-center m-0"
-      role="alert"
-    >
-      <strong>{{ message }}</strong>
-      <button
-        type="button"
-        class="btn-close"
-        data-bs-dismiss="alert"
-        aria-label="Close"
-      ></button>
-      {% endfor %}
-    </div>
-    {% endif %}
+    {% include 'base/partials/message-alert.html' %}
     <!-- END Alert -->
 
     <!-- Navbar -->
@@ -43,6 +30,10 @@
     <!-- Content -->
     {% block content %}{% endblock content %}
     <!-- END Content -->
+
+      <!-- Footer -->
+      {% include 'base/partials/footer.html' %}
+      <!-- END Footer -->
 
     <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
     <script src="{% static 'js/todo.js' %}"></script>

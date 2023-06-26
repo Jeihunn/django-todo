@@ -8,7 +8,7 @@ class ListAdmin(admin.ModelAdmin):
                     "user", "is_active", "slug"]
     list_editable = ["is_active"]
     list_display_links = ["id", "title"]
-    search_fields= ["title"]
+    search_fields = ["title"]
     list_filter = ["is_active", "user"]
 
 
@@ -18,7 +18,7 @@ class TodoAdmin(admin.ModelAdmin):
                     "is_active", "is_completed", "is_deleted", "user", "list", "slug"]
     list_editable = ["is_active", "is_completed", "is_deleted"]
     list_display_links = ["id", "title"]
-    search_fields= ["title"]
+    search_fields = ["title"]
     list_filter = ["is_active", "is_completed", "is_deleted", "user", "list"]
 
 

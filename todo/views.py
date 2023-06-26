@@ -22,7 +22,6 @@ def list_view(request):
             todo_list = List.objects.create(title=title, user=request.user)
             return redirect("todo:list_view")
 
-
     for list_item in todo_lists:
         list_item.todos_count = list_item.list_todos.filter(
             is_active=True, is_deleted=False).count()

@@ -15,5 +15,3 @@ function toggleCompleted(list_slug, todo_slug) {
       alert("Xəta baş verdi. Zəhmət olmasa bir daha cəhd edin.");
     });
 }
-
-
